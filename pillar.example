@@ -1,0 +1,8 @@
+# note: both iso and users are optional 
+# users default is an empty list
+# iso default is /root/VBoxGuestAdditions.iso
+vbox-guest:
+  iso: /home/my-user/VBoxGuestAdditions-123.iso
+  users:
+    - alice
+    - bob
