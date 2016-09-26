@@ -1,3 +1,5 @@
+{% if grains['os_family']=="Debian" %}
+
 vbox-guest.additions-requirements:
   pkg.installed:
     - pkgs:
@@ -22,6 +24,14 @@ vbox-guest.additions-installed:
     - require:
       - pkg: vbox-guest.additions-requirements
       - mount: vbox-guest.additions-mounted
+
+{% endif %} #END: os = debian
+
+{% if grains['os_family']=="Gentoo" %}
+vbox-guest.additions-installed:
+  pkg.installed:
+    - name: app-emulation/virtualbox-guest-additions
+{% endif %} #END: os = gentoo
 
 {% for user in salt.pillar.get('vbox-guest:users',[]) %}
 vbox-guest.shared-folder-access-granted-to-{{ user }}:
