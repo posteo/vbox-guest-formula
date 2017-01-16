@@ -25,12 +25,25 @@ vbox-guest.additions-installed:
       - pkg: vbox-guest.additions-requirements
       - mount: vbox-guest.additions-mounted
 
+vbox-guest.service:
+  service.running:
+    - name: vboxadd-service
+    - enable: True
+    - require:
+      - cmd: vbox-guest.additions-installed
 {% endif %} #END: os = debian
 
 {% if grains['os_family']=="Gentoo" %}
 vbox-guest.additions-installed:
   pkg.installed:
     - name: app-emulation/virtualbox-guest-additions
+
+vbox-guest.service:
+  service.running:
+    - name: virtualbox-guest-additions
+    - enable: True
+    - require:
+      - pkg: app-emulation/virtualbox-guest-additions
 {% endif %} #END: os = gentoo
 
 {% for user in salt.pillar.get('vbox-guest:users',[]) %}
@@ -40,4 +53,5 @@ vbox-guest.shared-folder-access-granted-to-{{ user }}:
     - require:
       - user: {{ user }}
       - cmd: vbox-guest.additions-installed
+      - service: vbox-guest.service
 {% endfor %}
